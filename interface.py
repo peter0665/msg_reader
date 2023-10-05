@@ -15,9 +15,12 @@ def merge_excel(files):
                 raise Exception("ext")
             file_list.append(abs_path)
         except Exception:
-            error_list.append([os.path.basename(abs_path)])
+            error_list.append([os.path.basename(abs_path), "Not msg file"])
 
-    df = extract_table_from_msg(file_list, out_file)
+    df, ext_error = extract_table_from_msg(file_list, out_file)
+
+    if ext_error:
+        error_list += ext_error
 
     if not error_list:
         error_list = [["None"]]
@@ -29,15 +32,15 @@ def merge_excel(files):
 
 demo_output = [
     gr.File(label="Output Excel"),
-    gr.DataFrame(label="Result", interactive=True),
-    gr.List(label="Result", interactive=True),
+    gr.DataFrame(label="Result Table", interactive=True),
+    gr.List(label="Error files", interactive=True),
 ]
 
 demo = gr.Interface(
     merge_excel,
     gr.File(file_count="multiple", file_types=["msg"]),
     demo_output,
-    allow_flagging=False,
+    allow_flagging="never",
 )
     
-demo.launch(server_port=7990) 
+demo.launch(server_port=7990, server_name="0.0.0.0") 
