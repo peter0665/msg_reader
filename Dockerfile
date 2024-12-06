@@ -1,4 +1,4 @@
-FROM python:3.8.18-slim
+FROM python:3.10-slim
 LABEL maintainer="Parker Lee<Parker_Lee@wistron.com>"
 
 RUN mkdir -p /app
