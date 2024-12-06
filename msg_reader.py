@@ -2,7 +2,7 @@ import extract_msg
 import pandas as pd
 import os
 import re
-import sys
+
 
 def extract_table_from_msg(msg_files, excel_file_path):
     df = None
@@ -10,10 +10,10 @@ def extract_table_from_msg(msg_files, excel_file_path):
     for msg_path in msg_files:
         # Load the .msg file
         msg = extract_msg.Message(msg_path)
-        
+
         # Extract body from the .msg file
         body = msg.htmlBody.decode()
-        
+
         # Split the body into sections based on empty lines to find the table
         table = re.search(r"<table.*?</table>", body)
         if not table:
@@ -32,10 +32,10 @@ def extract_table_from_msg(msg_files, excel_file_path):
     # df = df.reset_index()
     # Drop index
     # df = df.drop("index", errors="ignore")
-    
+
     # # Save the DataFrame to an Excel file
     if df is None:
-        return None
+        return None, None
 
     df.to_excel(excel_file_path, index=False, engine="openpyxl")
 
